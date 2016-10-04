@@ -26,14 +26,25 @@ app.on('ready', () => {
     shell.openExternal(authUrl);
 
     win.loadURL(`file://${__dirname}/pinBased.html`);
+    win.webContents.openDevTools();
 
     ipcMain.once('SEND_PIN', (e, args) => {
       const oauthVerifier = args.pin;
       console.log(oauthToken, oauthVerifier);
-      oauth.getOAuthAccessToken(oauthToken, oauthTokenSecret, oauthVerifier, (error, accessToken, accessTokenSecret) => {
+      oauth.getOAuthAccessToken(oauthToken, oauthTokenSecret, oauthVerifier, (err, accessToken, accessTokenSecret) => {
         console.log('accessToken', accessToken);
         console.log('accessTokenSecret', accessTokenSecret);
       });
+
+      // ipcMain.on('asynchronous-message', (event, arg) => {
+      //   console.log(arg);  // prints "ping"
+      //   event.sender.send('asynchronous-reply', 'pong');
+      // });
+      //
+      // ipcMain.on('synchronous-message', (event, arg) => {
+      //   console.log(arg);  // prints "ping"
+      //   event.returnValue = 'pong';
+      // });
     });
   });
 });
